@@ -3,7 +3,7 @@ import Image from "next/image";
 import imageKv from "@/assets/kv.png";
 import imageClerk from "@/assets/clerk.png";
 import { Button } from "@/components/ui/button";
-import { SignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
 import { ArrowRight } from "lucide-react";
