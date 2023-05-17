@@ -1,16 +1,12 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Image from "next/image";
 
 import imageKv from "@/assets/kv.png";
 import imageClerk from "@/assets/clerk.png";
 import { Button } from "@/components/ui/button";
+import { SignIn, SignedIn, SignedOut } from "@clerk/nextjs";
+import Link from "next/link";
+
+import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
@@ -44,11 +40,20 @@ export default function Home() {
           />
         </a>
       </div>
-      <a href="/sign-in">
-        <Button className="mt-10" size={"lg"}>
-          Sign In
-        </Button>
-      </a>
+      <SignedOut>
+        <Link href="/sign-in">
+          <Button className="mt-10" size={"lg"}>
+            Sign In <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </Link>
+      </SignedOut>
+      <SignedIn>
+        <Link href="/app">
+          <Button className="mt-10" size={"lg"}>
+            Go To App <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </Link>
+      </SignedIn>
     </main>
   );
 }
