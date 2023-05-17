@@ -1,5 +1,4 @@
 import { kv } from "@vercel/kv";
-import { experimental_useOptimistic as useOptimistic } from "react";
 import Add from "./add";
 
 export default async function App() {
@@ -13,7 +12,7 @@ export default async function App() {
   return (
     <>
       <div className="break-words max-w-[200px]">{JSON.stringify(list)}</div>
-      <Add />
+      <Add list={list} />
     </>
   );
 }
