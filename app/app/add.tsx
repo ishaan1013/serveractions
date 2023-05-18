@@ -1,6 +1,6 @@
 "use client";
 
-import { nanoid } from "nanoid";
+import { nanoid } from "@/lib/utils";
 import { addItem } from "./actions";
 import { experimental_useOptimistic as useOptimistic } from "react";
 
