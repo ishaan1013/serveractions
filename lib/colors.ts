@@ -8,4 +8,6 @@ const colors = {
   pink: "#ec4899",
 };
 
+export type colorKeys = keyof typeof colors;
+
 export default colors;

@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import colors from "@/lib/colors";
+import colors, { colorKeys } from "@/lib/colors";
 
 export default async function App() {
   const list = await kv.lrange("storage", 0, -1);
@@ -18,8 +18,7 @@ export default async function App() {
 
   return (
     <>
-      <div className="break-words max-w-[200px]">{JSON.stringify(list)}</div>
-      <Add list={list} />
+      <Add list={list} labels={labels} dates={dates} />
 
       <div className="w-full max-w-screen-md px-4">
         <Table className="w-full">
@@ -36,9 +35,14 @@ export default async function App() {
                 <TableRow>
                   <TableCell className="font-mono">{item}</TableCell>
                   <TableCell>
-                    <div className="w-6 h-4 rounded-full bg-red-500" />
+                    <div
+                      style={{ background: colors[labels[index] as colorKeys] }}
+                      className="w-6 h-4 rounded-full"
+                    />
                   </TableCell>
-                  <TableCell className="text-right">...</TableCell>
+                  <TableCell className="text-right">
+                    {new Date(dates[index]).toLocaleDateString("en-US")}
+                  </TableCell>
                 </TableRow>
               );
             })}

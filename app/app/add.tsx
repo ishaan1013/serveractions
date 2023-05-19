@@ -11,13 +11,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Loader2 } from "lucide-react";
+import { Loader } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import colors, { colorKeys } from "@/lib/colors";
 
-export default function Add({ list, labels, dates }: any) {
+export default function Add({
+  list,
+  labels,
+  dates,
+}: {
+  list: string[];
+  labels: string[];
+  dates: string[];
+}) {
   const [addColor, setAddColor] = useState("red");
 
   let [optimisticList, addOptimisticItem] = useOptimistic(
     { list, sending: false },
-    (state, newList) => ({
+    (state, newList: string[]) => ({
       ...state,
       list: newList,
       sending: true,
@@ -26,7 +51,7 @@ export default function Add({ list, labels, dates }: any) {
 
   let [optimisticLabels, addOptimisticLabel] = useOptimistic(
     { labels, sending: false },
-    (state, newLabels) => ({
+    (state, newLabels: string[]) => ({
       ...state,
       labels: newLabels,
       sending: true,
@@ -35,7 +60,7 @@ export default function Add({ list, labels, dates }: any) {
 
   let [optimisticDates, addOptimisticDate] = useOptimistic(
     { dates, sending: false },
-    (state, newDates) => ({
+    (state, newDates: string[]) => ({
       ...state,
       dates: newDates,
       sending: true,
@@ -44,24 +69,66 @@ export default function Add({ list, labels, dates }: any) {
 
   return (
     <>
-      <div className="mt-8 break-words max-w-[200px] text-red-500">
+      {/* <div className="break-words max-w-[200px] mb-8 text-red-500">
         {JSON.stringify(optimisticList)}
+      </div> */}
+      <div className="w-full flex justify-center max-w-screen-md px-4">
+        <Accordion type="single" className="w-full" collapsible>
+          <AccordionItem value="item-1">
+            <AccordionTrigger>
+              <div className="flex items-center ">
+                Optimistic Table{" "}
+                <Loader2 className="w-4 text-muted-foreground h-4 ml-2 animate-spin" />
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Table className="w-full">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-44 xs:52 sm:w-64">ID</TableHead>
+                    <TableHead>Label</TableHead>
+                    <TableHead className="text-right">Date</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {optimisticList.list
+                    .slice(0, 2)
+                    .map((item: string, index: number) => {
+                      return (
+                        <TableRow>
+                          <TableCell className="font-mono">{item}</TableCell>
+                          <TableCell>
+                            <div
+                              style={{
+                                background:
+                                  colors[
+                                    optimisticLabels.labels[index] as colorKeys
+                                  ],
+                              }}
+                              className="w-6 h-4 rounded-full"
+                            />
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {new Date(
+                              optimisticDates.dates[index]
+                            ).toLocaleDateString("en-US")}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  <TableRow>
+                    <TableCell className="font-mono">...</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell className="text-right">...</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
-      <div className="flex items-center mt-4">
-        <Button
-          className="px-4 py-2 mr-2"
-          size={"sm"}
-          onClick={async () => {
-            const id = nanoid();
-            const now = Date.now().toString();
-            addOptimisticItem(optimisticList.list.concat(id));
-            addOptimisticLabel(optimisticLabels.labels.concat(addColor));
-            addOptimisticDate(optimisticDates.dates.concat(now));
-            await addItem(id, addColor, now);
-          }}
-        >
-          Add Item
-        </Button>
+
+      <div className="flex items-center my-6">
         <Select value={addColor} onValueChange={setAddColor}>
           <SelectTrigger className="w-[160px]">
             <SelectValue />
@@ -107,6 +174,20 @@ export default function Add({ list, labels, dates }: any) {
             </SelectItem>
           </SelectContent>
         </Select>
+        <Button
+          className="px-4 py-2 ml-2"
+          size={"sm"}
+          onClick={async () => {
+            const id = nanoid();
+            const now = Date.now().toString();
+            addOptimisticItem([id, ...optimisticList.list]);
+            addOptimisticLabel([addColor, ...optimisticLabels.labels]);
+            addOptimisticDate([now, ...optimisticDates.dates]);
+            await addItem(id, addColor, now);
+          }}
+        >
+          Add Item
+        </Button>
       </div>
     </>
   );
