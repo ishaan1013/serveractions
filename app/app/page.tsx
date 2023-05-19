@@ -9,14 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import colors from "@/lib/colors";
 
 export default async function App() {
   const list = await kv.lrange("storage", 0, -1);
-
-  // const [optimisticList, addOptimisticItem] = useOptimistic(
-
-  // );
-  // console.log(list);
+  const labels = await kv.lrange("labels", 0, -1);
+  const dates = await kv.lrange("dates", 0, -1);
 
   return (
     <>
@@ -33,12 +31,12 @@ export default async function App() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {list.map((item: string) => {
+            {list.map((item: string, index: number) => {
               return (
                 <TableRow>
                   <TableCell className="font-mono">{item}</TableCell>
                   <TableCell>
-                    <div className="w-7 h-4 rounded-full bg-red-500" />
+                    <div className="w-6 h-4 rounded-full bg-red-500" />
                   </TableCell>
                   <TableCell className="text-right">...</TableCell>
                 </TableRow>
