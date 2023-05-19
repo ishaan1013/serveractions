@@ -20,7 +20,7 @@ export default async function App() {
     <>
       <Add list={list} labels={labels} dates={dates} />
 
-      <div className="w-full max-w-screen-md px-4">
+      <div className="w-full max-w-screen-md px-4 pb-16">
         <Table className="w-full">
           <TableHeader>
             <TableRow>

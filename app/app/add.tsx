@@ -17,8 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Loader2 } from "lucide-react";
-import { Loader } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -78,7 +77,11 @@ export default function Add({
             <AccordionTrigger>
               <div className="flex items-center ">
                 Optimistic Table{" "}
-                <Loader2 className="w-4 text-muted-foreground h-4 ml-2 animate-spin" />
+                {optimisticList.sending ? (
+                  <Loader2 className="w-4 text-muted-foreground h-4 ml-2 animate-spin" />
+                ) : (
+                  <Check className="w-4 text-muted-foreground h-4 ml-2" />
+                )}
               </div>
             </AccordionTrigger>
             <AccordionContent>
@@ -117,9 +120,11 @@ export default function Add({
                       );
                     })}
                   <TableRow>
-                    <TableCell className="font-mono">...</TableCell>
-                    <TableCell></TableCell>
-                    <TableCell className="text-right">...</TableCell>
+                    <TableCell className="select-none font-mono">...</TableCell>
+                    <TableCell className="select-none font-mono">...</TableCell>
+                    <TableCell className="select-none font-mono text-right">
+                      ...
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
