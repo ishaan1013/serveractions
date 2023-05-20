@@ -1,8 +1,11 @@
 "use client";
 
+import { experimental_useOptimistic as useOptimistic, useState } from "react";
 import { nanoid } from "@/lib/utils";
 import { addItem } from "./actions";
-import { experimental_useOptimistic as useOptimistic, useState } from "react";
+import { Check, Loader2 } from "lucide-react";
+import colors, { colorKeys } from "@/lib/colors";
+
 import {
   Select,
   SelectContent,
@@ -17,7 +20,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Check, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -26,7 +28,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import colors, { colorKeys } from "@/lib/colors";
 
 export default function Add({
   list,
@@ -180,14 +181,25 @@ export default function Add({
           </SelectContent>
         </Select>
         <Button
-          className="px-4 py-2 ml-2"
-          size={"sm"}
+          className="ml-2 flex items-center"
+          disabled={optimisticList.sending}
           onClick={async () => {
             const id = nanoid();
             const now = Date.now().toString();
-            addOptimisticItem([id, ...optimisticList.list]);
-            addOptimisticLabel([addColor, ...optimisticLabels.labels]);
-            addOptimisticDate([now, ...optimisticDates.dates]);
+
+            if (optimisticList.list.length > 3) {
+              addOptimisticItem([id, ...optimisticList.list.slice(0, 3)]);
+              addOptimisticLabel([
+                addColor,
+                ...optimisticLabels.labels.slice(0, 3),
+              ]);
+              addOptimisticDate([now, ...optimisticDates.dates.slice(0, 3)]);
+            } else {
+              addOptimisticItem([id, ...optimisticList.list]);
+              addOptimisticLabel([addColor, ...optimisticLabels.labels]);
+              addOptimisticDate([now, ...optimisticDates.dates]);
+            }
+
             await addItem(id, addColor, now);
           }}
         >
